@@ -1,0 +1,80 @@
+-- ============================================================================
+-- Week 8 Assignment: MySQL Database Backup and Restore
+-- Tool: mysqldump (Logical Backup Utility)
+-- Target Database: sales
+-- ============================================================================
+
+
+-- ============================================================================
+-- Question 1: Creating a Complete Database Backup
+-- ============================================================================
+-- Requirement Summary:
+--   1. Use 'root' as the MySQL username (-u root)
+--   2. Prompt for the MySQL password (-p)
+--   3. Export the complete 'sales' database to 'sales_backup.sql'
+--
+-- Command (run in system terminal / PowerShell / Command Prompt):
+--   mysqldump -u root -p sales > sales_backup.sql
+--
+-- Explanation of What the Command Does:
+--   - mysqldump connects to the MySQL server and generates SQL statements
+--     (such as CREATE DATABASE, CREATE TABLE, and INSERT) needed to recreate
+--     the schema and data of the 'sales' database.
+--   - '-u root' authenticates as the administrative 'root' user.
+--   - '-p' prompts interactively for the root password so credentials are not
+--     exposed in command history or scripts.
+--   - 'sales' specifies the target database to back up.
+--   - '> sales_backup.sql' redirects the generated SQL output into a file
+--     named sales_backup.sql in the current working directory.
+--
+-- Why Regular Database Backups Are Important:
+--   - Protects against accidental data deletion, corrupted writes, or faulty
+--     schema/application changes (such as bad migrations or bulk updates).
+--   - Supports disaster recovery and business continuity by providing a reliable
+--     restore point if hardware fails or an environment is compromised.
+--   - Enables safe testing, staging refreshes, and point-in-time recovery
+--     workflows without risking live production data.
+
+
+-- ============================================================================
+-- Question 2: Backing Up All Databases
+-- ============================================================================
+-- Requirement Summary:
+--   1. Export all databases on the server (--all-databases)
+--   2. Use 'root' as the MySQL username (-u root)
+--   3. Prompt for the MySQL password (-p)
+--   4. Save output to 'all_databases_backup.sql'
+--
+-- Command (run in system terminal / PowerShell / Command Prompt):
+--   mysqldump -u root -p --all-databases > all_databases_backup.sql
+--
+-- Explanation of What the Command Does:
+--   - '--all-databases' instructs mysqldump to dump every database managed by
+--     the MySQL server (including 'sales' and other application/system
+--     databases) along with their definitions and table rows.
+--   - '-u root -p' authenticates as root and prompts securely for the password.
+--   - '> all_databases_backup.sql' writes the full server-wide SQL dump into
+--     all_databases_backup.sql.
+--
+-- Why Backing Up All Databases Is Important Before Server Migration:
+--   - Prevents missing related or dependent databases alongside 'sales' during
+--     a move to a new server.
+--   - Ensures a complete, consistent snapshot of the entire MySQL instance
+--     before decommissioning or altering the source host.
+--   - Provides an immediate rollback artifact if migration issues occur on the
+--     target server, reducing downtime and recovery risk.
+
+
+-- ============================================================================
+-- Question 3: Data-Only Backup (If Applicable to Your Assignment Prompt)
+-- ============================================================================
+-- If Question 3 asks for a data-only backup of the 'sales' database (without
+-- CREATE TABLE DDL statements), use '--no-create-info' (or '-t'):
+--
+-- Command:
+--   mysqldump -u root -p --no-create-info sales > sales_data_only.sql
+--
+-- Explanation:
+--   - '--no-create-info' omits table-creation statements and exports only
+--     INSERT statements for existing rows, which is useful when loading data
+--     into tables that already exist with their target schema.
